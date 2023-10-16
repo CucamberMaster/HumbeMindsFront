@@ -1,13 +1,18 @@
-import { postAxios} from "../../axios/generic-api-calls";
-import {AudienceModel} from "./audienceModel";
-import {useMutation} from "@tanstack/react-query";
+import { useMutation } from '@tanstack/react-query';
+import { postAxios } from '../../axios/generic-api-calls';
+import { AudienceModel } from './audienceModel';
 
+export function useFetchAudience(data: AudienceModel, key:string = 'audience') {
+    const mutation = useMutation(
 
-export function useFetchAudience(key:string = 'audience') {
-    const mutation =  useMutation({
-    mutationFn:(data:AudienceModel) => {
-        return postAxios('/audience',data)
-    },
-    })
+        async () => {
+        return await postAxios('/audience', data);
+    });
 
+    return {
+        mutate: mutation.mutate,
+        isLoading: mutation.isLoading,
+        isError: mutation.isError,
+        error: mutation.error,
+    };
 }
